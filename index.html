@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simply Connect — HR Portal</title>
+<link rel="icon" href="assets/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<!-- ================= LOGIN SCREEN ================= -->
+<div id="loginScreen" class="login-wrap">
+  <div class="login-left">
+    <div class="login-card">
+      <img class="login-logo" src="assets/logo.png" alt="Simply Connect">
+      <h1>Welcome back</h1>
+      <p class="login-sub">Sign in to view your HR dashboard.</p>
+
+      <div class="role-toggle" id="roleToggle">
+        <button type="button" data-role="employee" class="active">Employee</button>
+        <button type="button" data-role="admin">Admin</button>
+      </div>
+
+      <div class="login-error" id="loginError"></div>
+
+      <form id="loginForm" data-role="employee">
+        <label>Employee ID or email
+          <input type="text" id="loginId" placeholder="EMP001 or your email" autocomplete="username">
+        </label>
+        <label>Password
+          <input type="password" id="loginPassword" placeholder="••••••••" autocomplete="current-password">
+        </label>
+        <button type="submit" class="btn-primary" id="loginBtn">Sign in</button>
+      </form>
+      <p class="login-hint">Trouble signing in? Contact your HR administrator.</p>
+    </div>
+  </div>
+
+  <div class="login-right">
+    <div class="login-right-logo"><img src="assets/logo.png" alt=""></div>
+    <h2>Attendance that runs itself, from the door to the dashboard.</h2>
+    <div class="login-clock" id="loginClock">00:00:00</div>
+    <div class="login-date" id="loginDate">—</div>
+
+    <div class="carousel">
+      <button class="carousel-arrow prev" id="carouselPrev">&#8249;</button>
+      <div class="carousel-track" id="carouselTrack"></div>
+      <button class="carousel-arrow next" id="carouselNext">&#8250;</button>
+    </div>
+    <div class="carousel-caption" id="carouselCaption"></div>
+    <div class="carousel-dots" id="carouselDots"></div>
+
+    <div class="login-stats">
+      <div><div class="n" id="statEmployees">—</div><div class="l">Employees tracked</div></div>
+      <div><div class="n">4</div><div class="l">Biometric terminals</div></div>
+      <div><div class="n">99.2%</div><div class="l">Sync uptime</div></div>
+    </div>
+    <div class="login-footer">© 2026 Simply Connect — HR Suite</div>
+  </div>
+</div>
+
+<!-- ================= LOADING ================= -->
+<div id="loadingScreen" class="loading-screen hidden">
+  <div class="spinner"></div>
+  <div style="font-weight:600;color:var(--muted);">Loading your dashboard…</div>
+</div>
+
+<!-- ================= APP SHELL ================= -->
+<div id="appShell" class="app-shell hidden">
+  <aside class="sidebar">
+    <img class="brand-icon" src="assets/logo.png" alt="" style="width:36px;height:auto;margin-bottom:20px;">
+    <button class="nav-item active" data-page="dashboard"><span class="ic">&#8962;</span>Home</button>
+    <button class="nav-item" data-page="employees"><span class="ic">&#128101;</span>Employees</button>
+    <button class="nav-item" data-page="attendance"><span class="ic">&#128337;</span>Attendance</button>
+    <button class="nav-item" data-page="payroll"><span class="ic">&#128176;</span>Payroll</button>
+    <button class="nav-item" data-page="requests"><span class="ic">&#128203;</span>Requests</button>
+    <button class="nav-item logout" id="logoutBtn"><span class="ic">&#8630;</span>Sign out</button>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <img class="tb-logo" src="assets/logo.png" alt="Simply Connect">
+      <div class="tb-company" id="tbCompany">Simply Connect</div>
+      <div class="topbar-right">
+        <button class="tb-icon" id="notifBtn" title="Notifications">&#128276;<span class="dot"></span></button>
+        <div class="tb-avatar" id="tbAvatar">--</div>
+      </div>
+    </header>
+
+    <main class="content" id="mainContent"></main>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="js/config.js"></script>
+<script src="js/api.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
