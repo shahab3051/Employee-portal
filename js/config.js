@@ -6,7 +6,7 @@
  * https://script.google.com/macros/s/AKfycb.../exec
  */
 const CONFIG = {
-  API_URL: 'PASTE_YOUR_APPS_SCRIPT_WEB_APP_URL_HERE',
+  API_URL: 'https://script.google.com/macros/s/AKfycbxtUUVGeRq6DchBqFNQAGk7q1Otgt5bGjEw41lN78hND-1GcPZVCxdFLFGFoZR-_U6mOA/exec',
   // Local cache ki muddat (ms). Isse dashboard turant khulta hai,
   // background me fresh data aa jata hai.
   CACHE_TTL: 60 * 1000,
