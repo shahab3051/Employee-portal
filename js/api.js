@@ -45,10 +45,25 @@ const Api = (() => {
     url.searchParams.set('action', action);
     Object.entries(params).forEach(([k, v]) => url.searchParams.set(k, v));
 
-    const res = await fetch(url.toString(), { method: 'GET' });
-    if (!res.ok) throw new Error('Network error: ' + res.status);
-    const json = await res.json();
-    if (!json.success) throw new Error(json.error || 'Request failed');
+    let res;
+    try {
+      res = await fetch(url.toString(), { method: 'GET' });
+    } catch (netErr) {
+      throw new Error('Apps Script tak pahunch nahi payi (network/CORS issue). URL check karein: ' + netErr.message);
+    }
+    if (!res.ok) throw new Error('Server ne error diya: HTTP ' + res.status);
+
+    const raw = await res.text();
+    let json;
+    try {
+      json = JSON.parse(raw);
+    } catch (_) {
+      // Apps Script returned HTML instead of JSON — almost always a deployment
+      // access/permission problem (e.g. "Who has access" isn't set to Anyone,
+      // or the URL is the /dev test link instead of the deployed /exec link).
+      throw new Error('Apps Script se JSON nahi mila (deployment access ya URL check karein — README dekhein). Raw response: ' + raw.slice(0, 120));
+    }
+    if (!json.success) throw new Error(json.error || 'Server ne request reject kar di (koi wajah nahi batayi)');
 
     memCache.set(key, json.data);
     writeLocalCache(key, json.data);
@@ -56,14 +71,26 @@ const Api = (() => {
   }
 
   async function post(action, payload = {}) {
-    const res = await fetch(CONFIG.API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action, ...payload })
-    });
-    if (!res.ok) throw new Error('Network error: ' + res.status);
-    const json = await res.json();
-    if (!json.success) throw new Error(json.error || 'Request failed');
+    let res;
+    try {
+      res = await fetch(CONFIG.API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action, ...payload })
+      });
+    } catch (netErr) {
+      throw new Error('Apps Script tak pahunch nahi payi (network/CORS issue). URL check karein: ' + netErr.message);
+    }
+    if (!res.ok) throw new Error('Server ne error diya: HTTP ' + res.status);
+
+    const raw = await res.text();
+    let json;
+    try {
+      json = JSON.parse(raw);
+    } catch (_) {
+      throw new Error('Apps Script se JSON nahi mila (deployment access ya URL check karein). Raw response: ' + raw.slice(0, 120));
+    }
+    if (!json.success) throw new Error(json.error || 'Server ne request reject kar di (koi wajah nahi batayi)');
     invalidate();
     return json.data;
   }
